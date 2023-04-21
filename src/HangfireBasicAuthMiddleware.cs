@@ -66,7 +66,7 @@ public class HangfireBasicAuthMiddleware
             return;
         }
 
-        if (context.Request.Headers.TryGetValue(HeaderNames.Authorization, out StringValues stringValuesAuth))
+        if (!context.Request.Headers.TryGetValue(HeaderNames.Authorization, out StringValues stringValuesAuth))
         {
             _logger.LogDebug("Authorization header was null or empty... could be first login attempt to Hangfire");
             context.SetUnauthorized();
@@ -99,7 +99,7 @@ public class HangfireBasicAuthMiddleware
 
             if (credentialArray.Length != 2)
             {
-                _logger.LogWarning("Credentials are not formatted correctly (username and password be split by ':')");
+                _logger.LogWarning("Credentials are malformed (username and password must be split by ':')");
                 context.SetUnauthorized();
                 return;
             }
@@ -115,6 +115,7 @@ public class HangfireBasicAuthMiddleware
             }
         }
 
+        _logger.LogWarning("Authorization header was malformed (must start with 'Basic ')");
         context.SetUnauthorized();
     }
 }
