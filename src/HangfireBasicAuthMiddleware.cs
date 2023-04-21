@@ -6,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
+using Soenneker.Extensions.ByteArray;
+using Soenneker.Extensions.Configuration;
 using Soenneker.Extensions.HttpContext;
 using Soenneker.Extensions.String;
 
@@ -29,10 +31,10 @@ public class HangfireBasicAuthMiddleware
         _next = next;
         _logger = logger;
 
-        _username = config.GetValue<string>("Hangfire:Username");
-        _password = config.GetValue<string>("Hangfire:Password");
+        _username = config.GetValueStrict<string>("Hangfire:Username");
+        _password = config.GetValueStrict<string>("Hangfire:Password");
 
-        _localAuthenticationBypassEnabled = config.GetValue<bool>("Hangfire:LocalAuthenticationBypassEnabled");
+        _localAuthenticationBypassEnabled = config.GetValueStrict<bool>("Hangfire:LocalAuthenticationBypassEnabled");
 
         var url = config.GetValue<string>("Hangfire:Url");
 
@@ -86,17 +88,18 @@ public class HangfireBasicAuthMiddleware
 
             if (encodedUsernamePassword == null)
             {
-                _logger.LogInformation("Hangfire basic auth early exit, bad encoding");
+                _logger.LogWarning("Hangfire basic auth early exit, bad encoding");
                 context.SetUnauthorized();
                 return;
             }
 
-            string decodedUsernamePassword = Encoding.UTF8.GetString(Convert.FromBase64String(encodedUsernamePassword));
+            string decodedUsernamePassword = Convert.FromBase64String(encodedUsernamePassword).ToStr();
 
             string[] credentialArray = decodedUsernamePassword.Split(':', 2);
 
             if (credentialArray.Length != 2)
             {
+                _logger.LogWarning("Credentials are not formatted correctly (username and password be split by ':')");
                 context.SetUnauthorized();
                 return;
             }
@@ -106,6 +109,7 @@ public class HangfireBasicAuthMiddleware
 
             if (username.Equals(_username, StringComparison.OrdinalIgnoreCase) && password == _password)
             {
+                _logger.LogDebug("Hangfire authentication successful");
                 await _next.Invoke(context);
                 return;
             }
