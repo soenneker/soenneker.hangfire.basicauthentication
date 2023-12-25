@@ -8,5 +8,5 @@
 ## Installation
 
 ```
-Install-Package Soenneker.Hangfire.BasicAuthentication
+dotnet add package Soenneker.Hangfire.BasicAuthentication
 ```
