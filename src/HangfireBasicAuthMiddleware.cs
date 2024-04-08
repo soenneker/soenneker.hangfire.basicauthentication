@@ -42,78 +42,90 @@ public class HangfireBasicAuthMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
-        if (_username == null || _password == null)
-        {
-            context.SetUnauthorized();
-            return;
-        }
-
-        if (_localAuthenticationBypassEnabled)
-        {
-            if (context.IsLocalRequest())
-            {
-                _logger.LogInformation("Local network request, skipping authentication");
-                await _next.Invoke(context);
-                return;
-            }
-        }
-
-        if (!context.Request.Path.StartsWithSegments(_url))
+        if (!IsAuthenticationRequired(context))
         {
             await _next.Invoke(context);
             return;
         }
 
-        if (!context.Request.Headers.TryGetValue(HeaderNames.Authorization, out StringValues stringValuesAuth))
+        if (!TryGetAuthorizationHeader(context, out string authHeader))
         {
-            _logger.LogDebug("Authorization header was null or empty... could be first login attempt to Hangfire");
-            context.SetUnauthorized();
+            LogAndSetUnauthorized(context, "Authorization header missing or empty, possible first login attempt");
             return;
         }
 
-        var authHeader = stringValuesAuth.ToString();
-
-        if (authHeader.IsNullOrEmpty())
+        if (!IsBasicAuth(authHeader, out (string username, string password) credentials))
         {
-            _logger.LogDebug("Authorization header was null or empty... could be first login attempt to Hangfire");
-            context.SetUnauthorized();
+            LogAndSetUnauthorized(context, "Authorization header malformed or does not start with 'Basic'");
             return;
         }
 
-        if (authHeader.StartsWith("Basic "))
+        if (AreCredentialsValid(credentials))
         {
-            string? encodedUsernamePassword = authHeader.Split(' ', 2, StringSplitOptions.RemoveEmptyEntries)[1]?.Trim();
+            _logger.LogDebug("Authentication successful");
+            await _next.Invoke(context);
+            return;
+        }
 
-            if (encodedUsernamePassword == null)
+        LogAndSetUnauthorized(context, "Invalid credentials");
+    }
+
+    private bool IsAuthenticationRequired(HttpContext context)
+    {
+        if (_username == null || _password == null ||
+            (_localAuthenticationBypassEnabled && context.IsLocalRequest()) ||
+            !context.Request.Path.StartsWithSegments(_url))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private static bool TryGetAuthorizationHeader(HttpContext context, out string authHeader)
+    {
+        if (context.Request.Headers.TryGetValue(HeaderNames.Authorization, out StringValues headerValues))
+        {
+            authHeader = headerValues.ToString();
+
+            if (authHeader.IsNullOrEmpty())
+                return false;
+
+            return true;
+        }
+
+        authHeader = "";
+        return false;
+    }
+
+    private static bool IsBasicAuth(string authHeader, out (string username, string password) credentials)
+    {
+        if (authHeader.StartsWith("Basic ", StringComparison.OrdinalIgnoreCase))
+        {
+            string encodedCredentials = authHeader["Basic ".Length..].Trim();
+            string decodedCredentials = encodedCredentials.ToStringFromEncoded64();
+            string[] parts = decodedCredentials.Split(':', 2);
+
+            if (parts.Length == 2)
             {
-                _logger.LogWarning("Hangfire basic auth early exit, bad encoding");
-                context.SetUnauthorized();
-                return;
-            }
-
-            string decodedUsernamePassword = encodedUsernamePassword.ToStringFromEncoded64();
-
-            string[] credentialArray = decodedUsernamePassword.Split(':', 2);
-
-            if (credentialArray.Length != 2)
-            {
-                _logger.LogWarning("Credentials are malformed (username and password must be split by ':')");
-                context.SetUnauthorized();
-                return;
-            }
-
-            string username = credentialArray[0];
-            string password = credentialArray[1];
-
-            if (username.Equals(_username, StringComparison.InvariantCultureIgnoreCase) && password == _password)
-            {
-                _logger.LogDebug("Hangfire authentication successful");
-                await _next.Invoke(context);
-                return;
+                credentials = (parts[0], parts[1]);
+                return true;
             }
         }
 
-        _logger.LogWarning("Authorization header was malformed (must start with 'Basic ')");
+        credentials = ("", "");
+        return false;
+    }
+
+    private bool AreCredentialsValid((string username, string password) credentials)
+    {
+        return credentials.username.Equals(_username, StringComparison.OrdinalIgnoreCase) &&
+               credentials.password == _password;
+    }
+
+    private void LogAndSetUnauthorized(HttpContext context, string message)
+    {
+        _logger.LogWarning("{message}", message);
         context.SetUnauthorized();
     }
 }
