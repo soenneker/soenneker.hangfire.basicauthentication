@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
-using Soenneker.Extensions.ByteArray;
 using Soenneker.Extensions.Configuration;
 using Soenneker.Extensions.HttpContext;
 using Soenneker.Extensions.String;
@@ -93,7 +91,7 @@ public class HangfireBasicAuthMiddleware
                 return;
             }
 
-            string decodedUsernamePassword = Convert.FromBase64String(encodedUsernamePassword).ToStr();
+            string decodedUsernamePassword = encodedUsernamePassword.ToStringFromEncoded64();
 
             string[] credentialArray = decodedUsernamePassword.Split(':', 2);
 
@@ -107,7 +105,7 @@ public class HangfireBasicAuthMiddleware
             string username = credentialArray[0];
             string password = credentialArray[1];
 
-            if (username.Equals(_username, StringComparison.OrdinalIgnoreCase) && password == _password)
+            if (username.Equals(_username, StringComparison.InvariantCultureIgnoreCase) && password == _password)
             {
                 _logger.LogDebug("Hangfire authentication successful");
                 await _next.Invoke(context);
