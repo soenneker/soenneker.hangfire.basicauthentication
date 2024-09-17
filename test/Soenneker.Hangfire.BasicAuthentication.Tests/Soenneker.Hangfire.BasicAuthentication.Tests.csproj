@@ -32,7 +32,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\src\Soenneker.Hangfire.BasicAuthentication.csproj" />
+        <ProjectReference Include="..\..\src\Soenneker.Hangfire.BasicAuthentication.csproj" />
     </ItemGroup>
 
 </Project>
