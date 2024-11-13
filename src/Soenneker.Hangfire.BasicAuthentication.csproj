@@ -38,7 +38,7 @@
         <None Include="..\icon.png" Pack="true" PackagePath="\" />
         <PackageReference Include="Hangfire.Core" Version="1.8.15" />
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
-        <PackageReference Include="Soenneker.Extensions.Configuration" Version="2.1.478" />
+        <PackageReference Include="Soenneker.Extensions.Configuration" Version="2.1.479" />
         <PackageReference Include="Soenneker.Extensions.HttpContext" Version="2.1.361" />
     </ItemGroup>
 </Project>
