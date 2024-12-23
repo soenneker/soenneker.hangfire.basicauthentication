@@ -1,7 +1,8 @@
-﻿namespace Soenneker.Hangfire.BasicAuthentication.Extensions;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 
-public static class HangfireAuthorizeExtensions
+namespace Soenneker.Hangfire.BasicAuthentication.Registrars;
+
+public static class HangfireAuthorizeRegistrar
 {
     /// <summary>
     /// Adds simple basic authorization to the Hangfire instance - Hangfire:Username, Hangfire:Password config values necessary.
