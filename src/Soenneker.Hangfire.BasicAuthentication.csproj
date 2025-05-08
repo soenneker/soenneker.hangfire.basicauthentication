@@ -39,7 +39,7 @@
         <PackageReference Include="Hangfire.Core" Version="1.8.18" />
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.4" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-        <PackageReference Include="Soenneker.Extensions.Configuration" Version="3.0.683" />
+        <PackageReference Include="Soenneker.Extensions.Configuration" Version="3.0.684" />
         <PackageReference Include="Soenneker.Extensions.HttpContext" Version="3.0.592" />
     </ItemGroup>
 </Project>
