@@ -14,7 +14,7 @@ namespace Soenneker.Hangfire.BasicAuthentication;
 /// <summary>
 /// Allows for basic authentication via middleware
 /// </summary>
-public class HangfireBasicAuthMiddleware
+public sealed class HangfireBasicAuthMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly bool _localAuthenticationBypassEnabled;
