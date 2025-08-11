@@ -40,6 +40,6 @@
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.8" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="Soenneker.Extensions.Configuration" Version="3.0.712" />
-        <PackageReference Include="Soenneker.Extensions.HttpContext" Version="3.0.597" />
+        <PackageReference Include="Soenneker.Extensions.HttpContext" Version="3.0.598" />
     </ItemGroup>
 </Project>
