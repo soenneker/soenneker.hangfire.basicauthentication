@@ -46,7 +46,7 @@ public sealed class HangfireBasicAuthMiddleware
     {
         if (!IsAuthenticationRequired(context))
         {
-            await _next(context).NoSync();
+            await _next(context);
             return;
         }
 
