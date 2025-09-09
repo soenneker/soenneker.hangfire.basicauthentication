@@ -1,4 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Soenneker.Validators.BasicAuth;
+using Soenneker.Validators.BasicAuth.Abstract;
+using Soenneker.Validators.BasicAuth.Registrars;
 
 namespace Soenneker.Hangfire.BasicAuthentication.Registrars;
 
@@ -10,5 +14,11 @@ public static class HangfireAuthorizeRegistrar
     public static IApplicationBuilder UseHangfireAuthorized(this IApplicationBuilder builder)
     {
         return builder.UseMiddleware<HangfireBasicAuthMiddleware>();
+    }
+
+    public static IServiceCollection AddHangfireBasicAuth(this IServiceCollection services)
+    {
+        services.AddBasicAuthValidatorAsSingleton();
+        return services;
     }
 }
