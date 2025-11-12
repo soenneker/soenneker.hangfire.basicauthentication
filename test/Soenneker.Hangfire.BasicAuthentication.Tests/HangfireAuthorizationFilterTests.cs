@@ -1,3 +1,5 @@
+using AwesomeAssertions;
+using Soenneker.Hashing.Pbkdf2;
 using Soenneker.Tests.FixturedUnit;
 using Xunit;
 
@@ -11,7 +13,22 @@ public class HangfireAuthorizationFilterTests : FixturedUnitTest
     }
 
     [Fact]
-    public void Default()
+    public void Authorize_ShouldAlwaysReturnTrue()
     {
+        var filter = new HangfireAuthorizationFilter();
+
+        bool result = filter.Authorize(null!);
+
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void GeneratePassword()
+    {
+        const string plainText = "mysecretpassword";
+
+        string phc = Pbkdf2HashingUtil.Hash(plainText);
+
+        string.IsNullOrWhiteSpace(phc).Should().BeFalse();
     }
 }

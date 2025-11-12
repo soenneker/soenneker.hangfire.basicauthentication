@@ -61,7 +61,7 @@ public sealed class HangfireBasicAuthMiddleware
 
         if (!ok)
         {
-            LogAndSetUnauthorized(context, "Invalid Basic credentials");
+            LogAndSetUnauthorized(context, "Invalid credentials");
             return;
         }
 
