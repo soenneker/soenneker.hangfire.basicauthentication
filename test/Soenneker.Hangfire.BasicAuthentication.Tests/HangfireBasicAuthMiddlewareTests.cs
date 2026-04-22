@@ -10,17 +10,16 @@ using Soenneker.Hashing.Pbkdf2;
 using Soenneker.Hangfire.BasicAuthentication;
 using Soenneker.Hangfire.BasicAuthentication.Registrars;
 using Soenneker.Validators.BasicAuth.Abstract;
-using Xunit;
 
 namespace Soenneker.Hangfire.BasicAuthentication.Tests;
 
-[Collection("Collection")]
+[ClassDataSource<Host>(Shared = SharedType.PerTestSession)]
 public class HangfireBasicAuthMiddlewareTests
 {
     private const string Username = "user";
     private const string ValidPassword = "correct-password";
 
-    [Fact]
+    [Test]
     public async Task InvokeAsync_AllowsWhenPathDoesNotMatch()
     {
         var nextCalled = false;
@@ -46,7 +45,7 @@ public class HangfireBasicAuthMiddlewareTests
         context.Response.StatusCode.Should().Be(StatusCodes.Status200OK);
     }
 
-    [Fact]
+    [Test]
     public async Task InvokeAsync_DeniesWhenHeaderMissing()
     {
         var nextCalled = false;
@@ -73,7 +72,7 @@ public class HangfireBasicAuthMiddlewareTests
         context.Response.StatusCode.Should().Be(StatusCodes.Status401Unauthorized);
     }
 
-    [Fact]
+    [Test]
     public async Task InvokeAsync_DeniesWhenValidatorFails()
     {
         var nextCalled = false;
@@ -104,7 +103,7 @@ public class HangfireBasicAuthMiddlewareTests
         context.Response.StatusCode.Should().Be(StatusCodes.Status401Unauthorized);
     }
 
-    [Fact]
+    [Test]
     public async Task InvokeAsync_AllowsWhenValidatorSucceeds()
     {
         var nextCalled = false;
@@ -134,7 +133,7 @@ public class HangfireBasicAuthMiddlewareTests
         context.Response.StatusCode.Should().Be(StatusCodes.Status200OK);
     }
 
-    [Fact]
+    [Test]
     public void Constructor_ThrowsWhenUsernameMissing()
     {
         RequestDelegate next = _ => Task.CompletedTask;

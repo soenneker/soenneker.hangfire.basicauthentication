@@ -1,18 +1,17 @@
 using AwesomeAssertions;
 using Soenneker.Hashing.Pbkdf2;
-using Soenneker.Tests.FixturedUnit;
-using Xunit;
+using Soenneker.Tests.HostedUnit;
 
 namespace Soenneker.Hangfire.BasicAuthentication.Tests;
 
-[Collection("Collection")]
-public class HangfireAuthorizationFilterTests : FixturedUnitTest
+[ClassDataSource<Host>(Shared = SharedType.PerTestSession)]
+public class HangfireAuthorizationFilterTests : HostedUnitTest
 {
-    public HangfireAuthorizationFilterTests(Fixture fixture, ITestOutputHelper output) : base(fixture, output)
+    public HangfireAuthorizationFilterTests(Host host) : base(host)
     {
     }
 
-    [Fact]
+    [Test]
     public void Authorize_ShouldAlwaysReturnTrue()
     {
         var filter = new HangfireAuthorizationFilter();
@@ -22,7 +21,7 @@ public class HangfireAuthorizationFilterTests : FixturedUnitTest
         result.Should().BeTrue();
     }
 
-    [Fact]
+    [Test]
     public void GeneratePassword()
     {
         const string plainText = "mysecretpassword";
