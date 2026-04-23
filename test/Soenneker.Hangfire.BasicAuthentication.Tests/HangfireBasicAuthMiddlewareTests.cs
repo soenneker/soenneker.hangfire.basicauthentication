@@ -19,6 +19,10 @@ public class HangfireBasicAuthMiddlewareTests
     private const string Username = "user";
     private const string ValidPassword = "correct-password";
 
+    public HangfireBasicAuthMiddlewareTests(Host host)
+    {
+    }
+
     [Test]
     public async Task InvokeAsync_AllowsWhenPathDoesNotMatch()
     {
