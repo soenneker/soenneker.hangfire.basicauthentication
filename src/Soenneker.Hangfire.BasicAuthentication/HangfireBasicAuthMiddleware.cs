@@ -42,6 +42,11 @@ public sealed class HangfireBasicAuthMiddleware
             _url = new PathString(url);
     }
 
+    /// <summary>
+    /// Executes the invoke async operation.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     public async Task InvokeAsync(HttpContext context)
     {
         if (!IsAuthenticationRequired(context))

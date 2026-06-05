@@ -7,6 +7,11 @@ namespace Soenneker.Hangfire.BasicAuthentication;
 /// </summary>
 public sealed class HangfireAuthorizationFilter : IDashboardAuthorizationFilter
 {
+    /// <summary>
+    /// Executes the authorize operation.
+    /// </summary>
+    /// <param name="dashboardContext">The dashboard context.</param>
+    /// <returns>A value indicating whether the operation succeeded.</returns>
     public bool Authorize(DashboardContext dashboardContext)
     {
         return true;

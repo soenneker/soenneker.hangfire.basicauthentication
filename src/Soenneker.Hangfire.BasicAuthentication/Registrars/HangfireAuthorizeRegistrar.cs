@@ -4,6 +4,9 @@ using Soenneker.Validators.BasicAuth.Registrars;
 
 namespace Soenneker.Hangfire.BasicAuthentication.Registrars;
 
+/// <summary>
+/// Represents the hangfire authorize registrar.
+/// </summary>
 public static class HangfireAuthorizeRegistrar
 {
     /// <summary>
@@ -14,6 +17,11 @@ public static class HangfireAuthorizeRegistrar
         return builder.UseMiddleware<HangfireBasicAuthMiddleware>();
     }
 
+    /// <summary>
+    /// Adds hangfire basic auth.
+    /// </summary>
+    /// <param name="services">The service collection.</param>
+    /// <returns>The result of the operation.</returns>
     public static IServiceCollection AddHangfireBasicAuth(this IServiceCollection services)
     {
         services.AddBasicAuthValidatorAsSingleton();
