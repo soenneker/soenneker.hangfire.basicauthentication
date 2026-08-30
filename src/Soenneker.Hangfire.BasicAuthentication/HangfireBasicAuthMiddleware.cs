@@ -11,8 +11,8 @@ using Soenneker.Validators.BasicAuth.Abstract;
 namespace Soenneker.Hangfire.BasicAuthentication;
 
 /// <summary>
-/// Basic Auth gate for /hangfire (or configured path), delegating parsing + verification to IBasicAuthValidator.
-/// Keeps password only as a PHC record (no plaintext in config).
+/// Protects the configured Hangfire dashboard path with HTTP Basic authentication.
+/// Password verification uses a PBKDF2 PHC record rather than a configured plaintext password.
 /// </summary>
 public sealed class HangfireBasicAuthMiddleware
 {
@@ -43,10 +43,10 @@ public sealed class HangfireBasicAuthMiddleware
     }
 
     /// <summary>
-    /// Invokes async.
+    /// Authenticates matching dashboard requests and invokes the next middleware when access is allowed.
     /// </summary>
     /// <param name="context">HTTP context containing the Authorization header.</param>
-    /// <returns>A task that completes when the invoke async operation is complete.</returns>
+    /// <returns>A task that completes when the request has been handled.</returns>
     public async Task InvokeAsync(HttpContext context)
     {
         if (!IsAuthenticationRequired(context))
