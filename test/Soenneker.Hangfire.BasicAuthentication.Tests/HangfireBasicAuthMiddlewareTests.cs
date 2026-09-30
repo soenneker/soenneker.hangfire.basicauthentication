@@ -24,7 +24,7 @@ public class HangfireBasicAuthMiddlewareTests
     }
 
     [Test]
-    public async Task InvokeAsync_AllowsWhenPathDoesNotMatch()
+    public async ValueTask InvokeAsync_AllowsWhenPathDoesNotMatch()
     {
         var nextCalled = false;
         RequestDelegate next = _ =>
@@ -50,7 +50,7 @@ public class HangfireBasicAuthMiddlewareTests
     }
 
     [Test]
-    public async Task InvokeAsync_DeniesWhenHeaderMissing()
+    public async ValueTask InvokeAsync_DeniesWhenHeaderMissing()
     {
         var nextCalled = false;
         RequestDelegate next = _ =>
@@ -77,7 +77,7 @@ public class HangfireBasicAuthMiddlewareTests
     }
 
     [Test]
-    public async Task InvokeAsync_DeniesWhenValidatorFails()
+    public async ValueTask InvokeAsync_DeniesWhenValidatorFails()
     {
         var nextCalled = false;
         RequestDelegate next = _ =>
@@ -108,7 +108,7 @@ public class HangfireBasicAuthMiddlewareTests
     }
 
     [Test]
-    public async Task InvokeAsync_AllowsWhenValidatorSucceeds()
+    public async ValueTask InvokeAsync_AllowsWhenValidatorSucceeds()
     {
         var nextCalled = false;
         RequestDelegate next = _ =>
