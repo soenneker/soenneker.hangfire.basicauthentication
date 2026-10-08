@@ -10,6 +10,7 @@ using Soenneker.Hashing.Pbkdf2;
 using Soenneker.Hangfire.BasicAuthentication;
 using Soenneker.Hangfire.BasicAuthentication.Registrars;
 using Soenneker.Validators.BasicAuth.Abstract;
+using System.Threading;
 
 namespace Soenneker.Hangfire.BasicAuthentication.Tests;
 
@@ -24,7 +25,7 @@ public class HangfireBasicAuthMiddlewareTests
     }
 
     [Test]
-    public async ValueTask InvokeAsync_AllowsWhenPathDoesNotMatch()
+    public async ValueTask InvokeAsync_AllowsWhenPathDoesNotMatch(CancellationToken cancellationToken)
     {
         var nextCalled = false;
         RequestDelegate next = _ =>
@@ -50,7 +51,7 @@ public class HangfireBasicAuthMiddlewareTests
     }
 
     [Test]
-    public async ValueTask InvokeAsync_DeniesWhenHeaderMissing()
+    public async ValueTask InvokeAsync_DeniesWhenHeaderMissing(CancellationToken cancellationToken)
     {
         var nextCalled = false;
         RequestDelegate next = _ =>
@@ -77,7 +78,7 @@ public class HangfireBasicAuthMiddlewareTests
     }
 
     [Test]
-    public async ValueTask InvokeAsync_DeniesWhenValidatorFails()
+    public async ValueTask InvokeAsync_DeniesWhenValidatorFails(CancellationToken cancellationToken)
     {
         var nextCalled = false;
         RequestDelegate next = _ =>
@@ -108,7 +109,7 @@ public class HangfireBasicAuthMiddlewareTests
     }
 
     [Test]
-    public async ValueTask InvokeAsync_AllowsWhenValidatorSucceeds()
+    public async ValueTask InvokeAsync_AllowsWhenValidatorSucceeds(CancellationToken cancellationToken)
     {
         var nextCalled = false;
         RequestDelegate next = _ =>
