@@ -32,9 +32,9 @@ public sealed class HangfireBasicAuthMiddleware
         _logger = logger;
         _basicAuthValidator = basicAuthValidator;
 
-        _username = config.GetValueStrict<string>("Hangfire:Username");
-        _passwordPhc = config.GetValueStrict<string>("Hangfire:PasswordPhc");
-        _localAuthenticationBypassEnabled = config.GetValueStrict<bool>("Hangfire:LocalAuthenticationBypassEnabled");
+        _username = config.GetStringStrict("Hangfire:Username");
+        _passwordPhc = config.GetStringStrict("Hangfire:PasswordPhc");
+        _localAuthenticationBypassEnabled = bool.Parse(config.GetStringStrict("Hangfire:LocalAuthenticationBypassEnabled"));
 
         var url = config.GetValue<string>("Hangfire:Url");
 
