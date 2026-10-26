@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net10.0</TargetFramework>
+        <TargetFramework>net11.0</TargetFramework>
         <IsAotCompatible>true</IsAotCompatible>
         <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
         <Nullable>enable</Nullable>
@@ -10,7 +10,7 @@
 
     <PropertyGroup>
         <Description>Protects the Hangfire dashboard with PBKDF2-backed HTTP Basic authentication</Description>
-        <Version Condition="'$(BUILD_VERSION)' == ''">4.0.0</Version>
+        <Version Condition="'$(BUILD_VERSION)' == ''">11.0.0</Version>
         <Version Condition="'$(BUILD_VERSION)' != ''">$(BUILD_VERSION)</Version>
         <AssemblyName>Soenneker.Hangfire.BasicAuthentication</AssemblyName>
         <PackageId>Soenneker.Hangfire.BasicAuthentication</PackageId>
@@ -47,6 +47,6 @@
         <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
         <PackageReference Include="Hangfire.Core" Version="1.8.25" />
         <PackageReference Include="Soenneker.Extensions.HttpContext" Version="4.0.777" />
-        <PackageReference Include="Soenneker.Validators.BasicAuth" Version="4.0.269" />
+        <PackageReference Include="Soenneker.Validators.BasicAuth" Version="4.0.270" />
     </ItemGroup>
 </Project>
