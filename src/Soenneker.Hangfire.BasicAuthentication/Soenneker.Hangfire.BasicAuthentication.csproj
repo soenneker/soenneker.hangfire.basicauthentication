@@ -47,7 +47,7 @@
     <ItemGroup>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
         <PackageReference Include="Hangfire.Core" Version="1.8.25" />
-        <PackageReference Include="Soenneker.Extensions.HttpContext" Version="11.0.788" />
+        <PackageReference Include="Soenneker.Extensions.HttpContext" Version="11.0.789" />
         <PackageReference Include="Soenneker.Validators.BasicAuth" Version="11.0.284" />
     </ItemGroup>
 </Project>
